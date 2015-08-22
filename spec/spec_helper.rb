@@ -4,16 +4,12 @@ require_relative '../config/environment'
 
 RSpec.configure do |config|
 
-  config.before do
-    run_rake_task('db:migrate')
+  config.before(:suite) do
+    DatabaseCleaner.clean_with(:truncation)
+    DatabaseCleaner.start
+    DatabaseCleaner.clean
   end
-end
 
-def run_rake_task(task)
-  RAKE_APP[task].invoke
-  if task == 'db:migrate'
-    RAKE_APP[task].reenable
-  end
 end
 
 def __
